@@ -6,9 +6,11 @@ Differential privacy can be seen as a standard for privacy guarantee for algorit
 <p><img src="https://miro.medium.com/max/700/1*IKhOQqMSkinUSGpD16XYpw.png" alt="Differential privacy" width="700" height="379" /></p>
 
 Mathematical definition of differential privacy is as follows: An algorithm K gives ε-differential privacy if for  data sets D and D′, differing by at most one row, and any S (input) ⊆ Range(K) 
-<p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://miro.medium.com/max/295/0*gIUyTQ9Blcafs8Ea" alt="e-differential privacy" width="295" height="19" /></p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/s5Sz7xH/diffpr.png" alt="epsilon, delta differential privacy" width="439" height="60" /></p>
 
-Differential privacy deals with this problem by adding "noise"or randomness to the data, which prevents identifying any individual data points.
+Epsilon is a metric of privacy loss, the lower the more privacy is guaranteed. Delta is an additional metric of probability of breaking the plain epsilon differential privacy.
+
+Differential privacy deals with this problem by adding "noise"or randomness to the data, which prevents identifying any individual data points. Instead of returning the raw data, the algorithm return an approximation of the data. Intuitively, the noise level is related to the accuracy of the algorithm, the more noise we introduce, the higher the privacy, but the accuracy will be lower.
 <h2>3. Differential privacy mechanisms:</h2>
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>2.1 DP-SGD</strong></span></h3>
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>2.2 Moments accountant</strong></span></h3>
