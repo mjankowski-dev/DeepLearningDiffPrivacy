@@ -5,8 +5,8 @@ Recent explosive progress of the machine learning and deep learning industry rai
 Differential privacy can be seen as a standard for privacy guarantee for algorithms that rely on data-bases. An algorithm is called differentialy private if by looking at the output, one cannot tell if certain individual data was included or not. This means that the behavior of the algorithm doesn't change whether the inputs from one individual are or are not in the dataset. Consider two adjacent data bases, which means that they differ with at least a single entry. The output of the algorithm based on either of the databases shouldn't differ more than epsilon, to satisfy the delta,epsilon differential privacy.
 <p><img src="https://miro.medium.com/max/700/1*IKhOQqMSkinUSGpD16XYpw.png" alt="Differential privacy" width="700" height="379" /></p>
 
-Mathematical definition of differential privacy is as follows: An algorithm K gives ε-differential privacy if for all data sets D and D′ differing on at most one row, and any S ⊆ Range(K) 
-<p><img src="https://miro.medium.com/max/295/0*gIUyTQ9Blcafs8Ea" alt="e-differential privacy" width="295" height="19" /></p>
+Mathematical definition of differential privacy is as follows: An algorithm K gives ε-differential privacy if for  data sets D and D′, differing by at most one row, and any S (input) ⊆ Range(K) 
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://miro.medium.com/max/295/0*gIUyTQ9Blcafs8Ea" alt="e-differential privacy" width="295" height="19" /></p>
 
 Differential privacy deals with this problem by adding "noise"or randomness to the data, which prevents identifying any individual data points.
 <h2>3. Differential privacy mechanisms:</h2>
