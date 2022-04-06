@@ -14,7 +14,21 @@ Epsilon is a metric of privacy loss, the lower the more privacy is guaranteed. D
 Differential privacy deals with this problem by adding "noise"or randomness to the data, which prevents identifying any individual data points. Instead of returning the raw data, the algorithm return an approximation of the data. Intuitively, the noise level is related to the accuracy of the algorithm, the more noise we introduce, the higher the privacy, but the accuracy will be lower.
 <h2>3. Differential privacy mechanisms:</h2>
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>2.1 DP-SGD</strong></span></h3>
+The optimizer plays a vital role in the differential privacy framework. Through a series of steps it attempts to mask the incoming gradients in order to prevent them from becoming too informative with regard to respective samples. Furthermore, following a different interpretation this operation can also potentially fight overfitting to some degree. \\
+The optimizing scheme works through four main steps. To start, the gradient based on the loss of every sample is obtained for every layer in the network using  the jacobian on a batch of samples. Once this is obtained this gradient is clipped, which is applied for each layer separately. This means that the gradients are normalized by the l2-norm scaled by a clipping constant $C$. Notice that clipping only occurs whenever $l2-norm > C$, otherwise the gradients pass through unmodified. After this all gradients per sample are combined into a single set to which noise is added. This noisy gradient is then used to update the parameters.    
+
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>2.2 Moments accountant</strong></span></h3>
+The moment accountant keeps track of the pivacy loss encountered. Every time the optimization step is applied a small loss privacy in privacy is experienced. This loss can be computed and represented through either $\epsilon$ or $\delta$. The main factor governing the magnitude of this loss is the noise level applied in the optimizer ($\sigma$). If this is known and epsilon is kept fixed (as in our experiments) the corresponding delta can be computed. The moments for the loss variable are obtained by an operation between the probability density functions of a Gaussian and a Gaussian mixture distribution. In practice, the values for E1 and E2 are approximated over a large sample space of 10k over the 2 distributions.
+
+
+/figure
+
+This moment is computed for every possible lambda under consideration. For every iteration the respective moments are continuously summed using the composability theorem:
+
+/figure
+
+After this has been done the most limiting moment can be identified. Note that this might change between iterations, experical evidence shows a tendency to select higher moments first, yet this selection scales down to lower moments as the iterations continue. Using this moment the delta can be computed and checked against a threshold. As long as this threshold is not exceeded training continues. The corresponding delta can be obtained according to: 
+ /figure
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>2.3 DP-PCA</strong></span></h3>
 <h2>4. Experimental setup:</h2>
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.1 MNIST</strong></span></h3>
