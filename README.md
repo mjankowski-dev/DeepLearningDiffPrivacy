@@ -34,6 +34,7 @@ After this has been done the most limiting moment can be identified. Note that t
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>2.3 DP-PCA</strong></span></h3>
 <h2>4. Reproduced setup:</h2>
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.1 MNIST</strong></span></h3>
+The data set used to reproduce the findings of the paper was MNIST dataset which is a 
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.2 Preprocessing</strong></span></h3>
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.3 Architecture</strong></span></h3>
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.4 Effects of parameters</strong></span></h3>
