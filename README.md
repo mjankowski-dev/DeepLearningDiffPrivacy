@@ -1,4 +1,4 @@
-<pre><span style="text-decoration: underline;"><em><strong><span style="color: #0000ff;">Maciej Jankowski (<a href="mailto:M.R.Jankowski@student.tudelft.nl">M.R.Jankowski@student.tudelft.nl</a>) and Reinier Vos (<a href="mailto:R.Vos@student.tudelft.nl">R.Vos@student.tudelft.nl</a>)</span></strong></em></span></pre>
+
 
 
 <h2>1. Introduction:</h2>
