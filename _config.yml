@@ -1,3 +1,4 @@
 theme: jekyll-theme-cayman
 title: Deep Learning with Differential Privacy
 description: Reproduction of a differentialy private model
+author: Maciej Jankowski (M.R.Jankowski@student.tudelft.nl) and Reinier Vos (R.Vos@student.tudelft.nl)
