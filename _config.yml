@@ -1,0 +1,10 @@
+theme: jekyll-theme-cayman
+title: Deep Learning with Differential Privacy
+description: Reproduction of a differentialy private model
+author :
+  name : Maciej Jankowski
+  email : M.R.Jankowski@student.tudelft.nl
+  github : mjankowski-dev
+author :
+  name : Reinier Vos
+  email : R.Vos@student.tudelft.nl
