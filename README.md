@@ -39,11 +39,16 @@ The process of applying PCA to any data set start with standardazing the data. S
 
 Next step is to calculate the covariance matrix of the data. Covariance matrix is a symmetrical matrix of size  equal to the input size. The entries are the covariances associated with the pairs of variables. The diagonal is composed of variances, as covariance of variable with itself is a variance. Covariance matrix can be obtained by multiplying the input data by the transpose of the data. 
 
-To obtain a Differentially private version of the pca, one needs to add noise to the variance matrix. To preserve the properties of the covariance matrix, the noise should be symmetrical aswell. For this reproduction we are using Gaussian noise as the authors of the paper suggested.
+To obtain a Differentially private version of the pca, one needs to add noise to the variance matrix. To preserve the properties of the covariance matrix, the added noise should be symmetrical aswell. For this reproduction we are using Gaussian noise as the authors of the paper suggested. Following code snippet presents how to obtain private covariance matrix:
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/N2rNr18/noise.png" alt="noise" width="1064" height="171" /></p>
+
+By calculating the eigenvalues and eigenvectors of the noisy covariance matrix, one can identify the principal components of the data set. Ordering the eigenvectors in descending order corresponds to ordering the components in order of significance. To obtain n-dimensional projection a feature vectors is constructed, containing n first sorted eigenvectors. 
+
+The final projection is obtained by reorienting the input data along the calculated principal axis. This can be done by multiplying the transposes of the feature vector and the input data.
 
 <h2>4. Reproduced setup:</h2>
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.1 MNIST</strong></span></h3>
-The data set used to reproduce the findings of the paper was MNIST dataset which is a 
+The data set used to reproduce the findings of the paper was MNIST dataset which is a publicly sourced dataset containing 70 000 images of hand written digits along witht he corresponding labels from 0 to 9. The data set is loaded from the Tensorflow/Keras library as indicated in the paper. This data set is widely available which is an advantage for the reproducers. The data set is split into a training and test set in ratio 6:1. 
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.2 Preprocessing</strong></span></h3>
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.3 Architecture</strong></span></h3>
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.4 Effects of parameters</strong></span></h3>
