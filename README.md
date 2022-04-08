@@ -54,6 +54,13 @@ The data set comes in format of 3 dimensional array [n_samples,x_pixels,y_pixels
 <p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/rxjbH4G/batching.png" alt="batching" width="996" height="246" /></p>
 
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.3 Architecture</strong></span></h3>
+The architecture of the network mentioned in the paper is simple, because it only consists of a input layer, single hidden layer with 1000 neurons and Relu activation followed by an output layers of size 10 with softmax activation.
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/QC27qZp/model.png" alt="model" width="859" height="248" /></p>
+
+Unfortunately, the standard sequence model framework from Tensorflow cannot be used as applying the differential privacy mechanism requires inspecting and clipping the gradients, which breakes the parallel nature of the Tensorflow module. Thats why the training must be performed by "hand"by means of for loops. Following code snippet represents training of the neural network for one epoch, using the DP_SGD optimizer and moments accountant:
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/JHy6pLR/trainepoch.png" alt="trainepoch" width="1049" height="580" /></p>
+
+
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.4 Effects of parameters</strong></span></h3>
 <h2>5. Results:</h2>
 <p>&nbsp;</p>
