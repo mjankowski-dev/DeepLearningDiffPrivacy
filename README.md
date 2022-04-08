@@ -32,6 +32,7 @@ After this has been done the most limiting moment can be identified. Note that t
 <p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://iili.io/MwpmRp.jpg" alt="Moment3" width="282" height="84" /></p>
 
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>2.3 DP-PCA</strong></span></h3>
+Principal component analysis is a strong tool used to approximate high dimensional data in fewer dimensions. Low dimensional approximation still preserves most of the information, at a smaller variable amount. This is beneficial for the  
 <h2>4. Reproduced setup:</h2>
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.1 MNIST</strong></span></h3>
 The data set used to reproduce the findings of the paper was MNIST dataset which is a 
