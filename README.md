@@ -49,13 +49,13 @@ By calculating the eigenvalues and eigenvectors of the noisy covariance matrix, 
 The final projection is obtained by reorienting the input data along the calculated principal axis. This can be done by multiplying the transposes of the feature vector and the input data.
 
 <h2>4. Reproduced setup:</h2>
-<h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.1 MNIST</strong></span></h3>
+<h3><span style="color: #99ccff; background-color: #ffffff;"><strong>4.1 MNIST</strong></span></h3>
 The data set used to reproduce the findings of the paper was MNIST dataset which is a publicly sourced dataset containing 70 000 of 28 by 28 pixel images of hand written digits along with the corresponding labels from 0 to 9. The data set is loaded from the Tensorflow/Keras library as indicated in the paper. This data set is widely available which is an advantage for the reproducers. The data set is split into a training and test set in ratio 6:1. 
-<h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.2 Preprocessing</strong></span></h3>
+<h3><span style="color: #99ccff; background-color: #ffffff;"><strong>4.2 Preprocessing</strong></span></h3>
 The data set comes in format of 3 dimensional array [n_samples,x_pixels,y_pixels], but for the purpose of training it has to be reshaped to 2 dimensional array [n_samples,x*y pixels]. After that the inputs are standardized as a part of preparation for applying the DP-PCA. The standardized data is divided into batches with the specified lot size of 600. 
 <p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/rxjbH4G/batching.png" alt="batching" width="996" height="246" /></p>
 
-<h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.3 Architecture</strong></span></h3>
+<h3><span style="color: #99ccff; background-color: #ffffff;"><strong>4.3 Architecture</strong></span></h3>
 The architecture of the network mentioned in the paper is simple, because it only consists of a input layer, single hidden layer with 1000 neurons and Relu activation followed by an output layers of size 10 with softmax activation.
 <p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/QC27qZp/model.png" alt="model" width="859" height="248" /></p>
 
@@ -63,7 +63,7 @@ Unfortunately, the standard sequence model framework from Tensorflow cannot be u
 <p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/JHy6pLR/trainepoch.png" alt="trainepoch" width="1049" height="580" /></p>
 
 
-<h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.4 Effects of parameters</strong></span></h3>
+<h3><span style="color: #99ccff; background-color: #ffffff;"><strong>4.4 Effects of parameters</strong></span></h3>
 <h2>5. Results:</h2>
 <p>&nbsp;</p>
 <h2>6. Conclusion:</h2>
