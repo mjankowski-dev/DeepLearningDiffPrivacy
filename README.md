@@ -32,7 +32,15 @@ After this has been done the most limiting moment can be identified. Note that t
 <p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://iili.io/MwpmRp.jpg" alt="Moment3" width="282" height="84" /></p>
 
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>2.3 DP-PCA</strong></span></h3>
-Principal component analysis is a strong tool used to approximate high dimensional data in fewer dimensions. Low dimensional approximation still preserves most of the information, at a smaller variable amount. This is beneficial for the  
+Principal component analysis is a strong tool used to approximate high dimensional data in fewer dimensions. Low dimensional approximation still preserves most of the information, at a smaller variable amount. This is beneficial for the duration of the training. 
+
+The process of applying PCA to any data set start with standardazing the data. Since some inputs can be in range 0-1, others could be in range 0-100, which would result in bias towards the larger ranges. This is because PCA is very sensitive to variance in the variables. By standarizing the data all inputs will contribute equally to the result. This is the mathematical formulation :
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://builtin.com/sites/www.builtin.com/files/styles/ckeditor_optimize/public/inline-images/national/Principal%2520Component%2520Analysis%2520Standardization.png" alt="eq" width="263" height="54" /></p>
+
+Next step is to calculate the covariance matrix of the data. Covariance matrix is a symmetrical matrix of size  equal to the input size. The entries are the covariances associated with the pairs of variables. The diagonal is composed of variances, as covariance of variable with itself is a variance. Covariance matrix can be obtained by multiplying the input data by the transpose of the data. 
+
+To obtain a Differentially private version of the pca, one needs to add noise to the variance matrix. To preserve the properties of the covariance matrix, the noise should be symmetrical aswell. For this reproduction we are using Gaussian noise as the authors of the paper suggested.
+
 <h2>4. Reproduced setup:</h2>
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.1 MNIST</strong></span></h3>
 The data set used to reproduce the findings of the paper was MNIST dataset which is a 
