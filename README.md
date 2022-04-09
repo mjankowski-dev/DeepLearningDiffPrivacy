@@ -73,6 +73,9 @@ The goal was to reproduce the Figure 3 from the paper, which visualises the accu
 <p><img style="float: left;" src="https://i.ibb.co/41PtsLL/highnoise.png" alt="highnoise" width="394" height="295" /><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/kVZLhhZ/mediumnoise.png" width="394" height="295" /></p>
 <p><img style="float: right;" src="https://i.ibb.co/gM6NfRX/lownoise.png" alt="Low noise" width="394" height="295" /></p>
 
+<p><img style="float: left;" src="https://i.ibb.co/41PtsLL/highnoise.png" alt="highnoise" width="394" height="295" /><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/kVZLhhZ/mediumnoise.png" width="394" height="295" /></p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/gM6NfRX/lownoise.png" alt="Low noise" width="394" height="295" /></p>
+
 
 
 
