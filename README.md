@@ -14,7 +14,7 @@ Mathematical definition of differential privacy is as follows: An algorithm K gi
 
 Epsilon is a metric of privacy loss, the lower the more privacy is guaranteed. Delta is an additional metric of probability of breaking the plain epsilon differential privacy.
 
-Differential privacy deals with this problem by adding "noise"or randomness to the data, which prevents identifying any individual data points. Instead of returning the raw data, the algorithm return an approximation of the data. Intuitively, the noise level is related to the accuracy of the algorithm, the more noise we introduce, the higher the privacy, but the accuracy will be lower.
+Differential privacy deals with this problem by adding "noise"or randomness to the data, which prevents identifying any individual data points. Instead of returning the raw data, the algorithm return an approximation of the data. Intuitively, the noise level is related to the accuracy of the algorithm, the more noise we introduce, the higher the privacy, but the accuracy will be lower. Furthermore the gradient of the optimizer is clipped to prevent decrease output sensitivity to single input.
 <h2>3. Differential privacy mechanisms:</h2>
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>2.1 DP-SGD</strong></span></h3>
 The optimizer plays a vital role in the differential privacy framework. Through a series of steps it attempts to mask the incoming gradients in order to prevent them from becoming too informative with regard to respective samples. Furthermore, following a different interpretation this operation can also potentially fight overfitting to some degree. \\
@@ -65,5 +65,18 @@ Unfortunately, the standard sequence model framework from Tensorflow cannot be u
 
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>4.4 Effects of parameters</strong></span></h3>
 <h2>5. Results:</h2>
+The paper contained most of the information required to reproduce the results, although the source code is not directly available. From our perspective the hardest part to reproduce was the moment accountant. There seems to be a mistake in the moment accountant vs composition theorem privacy budget estimation. The figure 2 of the paper clerly indicates epsilon of 4.5 for 400 Epochs, while the paper reports 2.55 as the privacy loss estimation. This could be an editing error. 
+
+The paper also indicates that the noisy covariance matrix that is used to find principal components of the batch input, is based on a random sample of data. For our reproduction, basing the covariance matrix on only a small sample of data resulted in very poor final accuracy. Only when the noisy covariance matrix was based on full training data set, which is 60 000 samples, we could obtain satisfying results.Furthermore, the authors mention taking the privacy cost of the Principal component analysis into account, but the method or quantitive formulation is not included. 
+
+The goal was to reproduce the Figure 3 from the paper, which visualises the accuracy and privacy loss versus epochs for different noise levels. Below our results are presented. The test set accuracy is 89%, 95% and 96%  for (0.5, 10−5), (2, 10−5),and (8, 10−5)-differential privacy respectively.
+<p><img style="float: left;" src="https://i.ibb.co/gM6NfRX/lownoise.png" alt="Low noise" width="394" height="295" /><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/kVZLhhZ/mediumnoise.png" width="394" height="295" /><img style="float: right;" src="https://i.ibb.co/41PtsLL/highnoise.png" alt="highnoise" width="394" height="295" /></p>
+
+
+
+
+Furthermor variation of number of hidden layers is conducted and similar results are obtained.
+
+
 <p>&nbsp;</p>
 <h2>6. Conclusion:</h2>
