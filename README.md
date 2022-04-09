@@ -63,7 +63,6 @@ Unfortunately, the standard sequence model framework from Tensorflow cannot be u
 <p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/JHy6pLR/trainepoch.png" alt="trainepoch" width="1049" height="580" /></p>
 
 
-<h3><span style="color: #99ccff; background-color: #ffffff;"><strong>4.4 Effects of parameters</strong></span></h3>
 <h2>5. Results:</h2>
 The paper contained most of the information required to reproduce the results, although the source code is not directly available. From our perspective the hardest part to reproduce was the moment accountant. There seems to be a mistake in the moment accountant vs composition theorem privacy budget estimation. The figure 2 of the paper clerly indicates epsilon of 4.5 for 400 Epochs, while the paper reports 2.55 as the privacy loss estimation. This could be an editing error. 
 
@@ -79,6 +78,7 @@ The goal was to reproduce the Figure 3 from the paper, which visualises the accu
 
 
 Furthermor variation of number of hidden layers is conducted and similar results are obtained.
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/xqC2xMn/hiddenlayers-varying.jpg" alt="" /></p>
 
 
 <p>&nbsp;</p>
