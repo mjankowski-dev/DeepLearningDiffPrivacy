@@ -70,8 +70,7 @@ The paper contained most of the information required to reproduce the results, a
 The paper also indicates that the noisy covariance matrix that is used to find principal components of the batch input, is based on a random sample of data. For our reproduction, basing the covariance matrix on only a small sample of data resulted in very poor final accuracy. Only when the noisy covariance matrix was based on full training data set, which is 60 000 samples, we could obtain satisfying results.Furthermore, the authors mention taking the privacy cost of the Principal component analysis into account, but the method or quantitive formulation is not included. 
 
 The goal was to reproduce the Figure 3 from the paper, which visualises the accuracy and privacy loss versus epochs for different noise levels. Below our results are presented. The test set accuracy is 89%, 95% and 96%  for (0.5, 10−5), (2, 10−5),and (8, 10−5)-differential privacy respectively.
-<p><img style="float: left;" src="https://i.ibb.co/41PtsLL/highnoise.png" alt="highnoise" width="394" height="295" /><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/kVZLhhZ/mediumnoise.png" width="394" height="295" /></p>
-<p><img style="float: right;" src="https://i.ibb.co/gM6NfRX/lownoise.png" alt="Low noise" width="394" height="295" /></p>
+
 
 <p><img style="float: left;" src="https://i.ibb.co/41PtsLL/highnoise.png" alt="highnoise" width="394" height="295" /><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/kVZLhhZ/mediumnoise.png" width="394" height="295" /></p>
 <p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/gM6NfRX/lownoise.png" alt="Low noise" width="394" height="295" /></p>
