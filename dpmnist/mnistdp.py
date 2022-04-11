@@ -1,22 +1,12 @@
-import tensorflow as tf
-from sklearn.preprocessing import StandardScaler
-import numpy as np
-from sklearn.decomposition import PCA
-from scipy.linalg import eigh
 from momentacc import *
 from trainingloop import *
 from dp_sgd import *
 from tensorflow.python.ops.numpy_ops import np_config
-
 np_config.enable_numpy_behavior()
 import matplotlib.ticker as mticker
-import scipy.stats as sc
-import time
-
 import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
 import numpy as np
-from sklearn.decomposition import PCA
 from scipy.linalg import eigh
 
 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
@@ -25,20 +15,13 @@ assert x_test.shape == (10000, 28, 28), 'Shape not equal'
 assert y_train.shape == (60000,), 'Shape not equal'
 assert y_test.shape == (10000,), 'Shape not equal'
 print('Dataset booted')
-# Each example is a 28 × 28 size gray-level image. We use a simple feedforward neural network with ReLU units and softmax of 10
-# classes (corresponding to the 10 digits) with cross-entropy
-# loss and an optional PCA input layer.
-# Baseline model.
-# Our baseline model uses a 60-dimensional PCA projection
-# layer and a single hidden layer with 1,000 hidden units. Using the lot size of 600, we can reach accuracy of 98.30% in
-# about 100 epochs
+
 
 
 x_test = x_test.reshape(x_test.shape[0], 784)
 x_train = x_train.reshape(x_train.shape[0],
                           784)
 totalset = np.concatenate((x_test, x_train))
-# x_train = x_train[:000,:]
 scaler = StandardScaler()
 x_train = scaler.fit_transform(x_train)
 x_test = scaler.fit_transform(x_test)
@@ -52,18 +35,8 @@ covar += noise  # Add the noise
 
 
 def pca(data, covar):
-    print('progress 1')
-    # ovar = np.matmul(data.T, data)
-    # shape = tf.shape(covar)
-    # noise = tf.random.normal(shape, mean=0, stddev=2, dtype=tf.dtypes.float32)
-    # noise = (noise + noise.T)/2
-    # print(noise == noise.T)
-    # covar += noise
-    # print ( "The shape of variance matrix = ", covar.shape)
     values, vectors = eigh(covar, eigvals=(724, 783))
-
     vectors = vectors.T
-    # print(vectors.shape)
     final_data = np.matmul(vectors, data.T)
 
     return final_data
@@ -123,7 +96,6 @@ allParameters = {**parameters_ma,
 
 optimizer = tf.keras.optimizers.SGD(learning_rate=lr_sgd)  # [0.01,0.07] stable, best at 0.05
 loss_object = tf.keras.losses.SparseCategoricalCrossentropy(reduction=tf.compat.v1.losses.Reduction.NONE)
-# loss_object = tf.keras.losses.CategoricalCrossentropy()
 train_acc_metric = tf.keras.metrics.SparseCategoricalAccuracy()
 val_acc_metric = tf.keras.metrics.SparseCategoricalAccuracy()
 
