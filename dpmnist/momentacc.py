@@ -21,7 +21,7 @@ class moment_accountant():
     def __init__(self, seed, params: dict, deltaFixed=False, epsFixed=False, debug=False, **kwargs):
 
         # moment accountant hyperparameters
-        self.mixN = 1000  # samples for mixture of moment arrays
+        self.mixN = 10000  # samples for mixture of moment arrays
         self.debug = debug
         self.seed = seed
 
