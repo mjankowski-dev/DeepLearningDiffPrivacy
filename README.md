@@ -1,10 +1,10 @@
-<pre><span style="text-decoration: underline;"><em><strong><span style="color: #0000ff;">Maciej Jankowski (<a href="mailto:M.R.Jankowski@student.tudelft.nl">M.R.Jankowski@student.tudelft.nl</a>) and Reinier Vos (<a href="mailto:R.Vos@student.tudelft.nl">R.Vos@student.tudelft.nl</a>)</span></strong></em></span></pre>
+
 
 
 <h2>1. Introduction:</h2>
-Recent explosive progress of the machine learning and deep learning industry raises questions about the privacy guarantess of this field. Due to its nature, training neural networks requires large and extensive datasets, which are mostly crowdsourced. They can often contain sensitive information which is why this topic is important . This blogpost is about reproducing the fidings of the paper "Deep learning with Diferential privacy" by M. Abadi, A. Chu et al. Specificaly the diferential privacy mechanisms are combined with machine learning methods to train neural networks within single digit privacy budget. The next section gives insight into Differential privacy, which is followed by implementation of DP mechanisms. Section 4 presents the experimental setup of the network. Results and findings are presented in section 5.
+Recent explosive progress of the machine learning and deep learning industry raises questions about the privacy guarantess of this field. Due to its nature, training neural networks requires large and extensive datasets, which are mostly crowdsourced. They can often contain sensitive information which is why this topic is important . This blogpost is about reproducing the findings of the paper "Deep learning with Diferential privacy" by M. Abadi, A. Chu et al. Specificaly the diferential privacy mechanisms are combined with machine learning methods to train neural networks within single digit privacy budget. The next section gives insight into Differential privacy, which is followed by implementation of DP mechanisms. Section 4 presents the experimental setup of the network. Results and findings are presented in section 5.
 <h2>2. Differential privacy</h2>
-Differential privacy can be seen as a standard for privacy guarantee for algorithms that rely on data-bases. An algorithm is called differentialy private if by looking at the output, one cannot tell if certain individual data was included or not. This means that the behavior of the algorithm doesn't change whether the inputs from one individual are or are not in the dataset. Consider two adjacent data bases, which means that they differ with at least a single entry. The output of the algorithm based on either of the databases shouldn't differ more than epsilon, to satisfy the delta,epsilon differential privacy.
+Differential privacy can be seen as a standard for privacy guarantee for algorithms that rely on data-bases. An algorithm is called differentialy private if by looking at the output, one cannot tell if certain individual data was included or not. This means that the behavior of the algorithm doesn't change (significantly) whether the inputs from one individual are or are not in the dataset. Consider two adjacent data bases, which means that they differ with at least a single entry. The output of the algorithm based on either of the databases shouldn't differ more than epsilon, to satisfy the delta,epsilon differential privacy.
 <p><img src="https://miro.medium.com/max/700/1*IKhOQqMSkinUSGpD16XYpw.png" alt="Differential privacy" width="700" height="379" /></p>
 <p style="text-align: center;"><em>Source: <a href="https://privacytools.seas.harvard.edu/files/privacytools/files/pedagogical-document-dp_new.pdf">Kobbi Nissim</a></em></p>
 
@@ -14,7 +14,7 @@ Mathematical definition of differential privacy is as follows: An algorithm K gi
 
 Epsilon is a metric of privacy loss, the lower the more privacy is guaranteed. Delta is an additional metric of probability of breaking the plain epsilon differential privacy.
 
-Differential privacy deals with this problem by adding "noise"or randomness to the data, which prevents identifying any individual data points. Instead of returning the raw data, the algorithm return an approximation of the data. Intuitively, the noise level is related to the accuracy of the algorithm, the more noise we introduce, the higher the privacy, but the accuracy will be lower.
+Differential privacy deals with this problem by adding "noise"or randomness to the data, which prevents identifying any individual data points. Instead of returning the raw data, the algorithm return an approximation of the data. Intuitively, the noise level is related to the accuracy of the algorithm, the more noise we introduce, the higher the privacy, but the accuracy will be lower. Furthermore the gradient of the optimizer is clipped to prevent decrease output sensitivity to single input.
 <h2>3. Differential privacy mechanisms:</h2>
 <h3><span style="color: #99ccff; background-color: #ffffff;"><strong>2.1 DP-SGD</strong></span></h3>
 The optimizer plays a vital role in the differential privacy framework. Through a series of steps it attempts to mask the incoming gradients in order to prevent them from becoming too informative with regard to respective samples. Furthermore, following a different interpretation this operation can also potentially fight overfitting to some degree. \\
@@ -49,13 +49,13 @@ By calculating the eigenvalues and eigenvectors of the noisy covariance matrix, 
 The final projection is obtained by reorienting the input data along the calculated principal axis. This can be done by multiplying the transposes of the feature vector and the input data.
 
 <h2>4. Reproduced setup:</h2>
-<h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.1 MNIST</strong></span></h3>
+<h3><span style="color: #99ccff; background-color: #ffffff;"><strong>4.1 MNIST</strong></span></h3>
 The data set used to reproduce the findings of the paper was MNIST dataset which is a publicly sourced dataset containing 70 000 of 28 by 28 pixel images of hand written digits along with the corresponding labels from 0 to 9. The data set is loaded from the Tensorflow/Keras library as indicated in the paper. This data set is widely available which is an advantage for the reproducers. The data set is split into a training and test set in ratio 6:1. 
-<h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.2 Preprocessing</strong></span></h3>
+<h3><span style="color: #99ccff; background-color: #ffffff;"><strong>4.2 Preprocessing</strong></span></h3>
 The data set comes in format of 3 dimensional array [n_samples,x_pixels,y_pixels], but for the purpose of training it has to be reshaped to 2 dimensional array [n_samples,x*y pixels]. After that the inputs are standardized as a part of preparation for applying the DP-PCA. The standardized data is divided into batches with the specified lot size of 600. 
 <p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/rxjbH4G/batching.png" alt="batching" width="996" height="246" /></p>
 
-<h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.3 Architecture</strong></span></h3>
+<h3><span style="color: #99ccff; background-color: #ffffff;"><strong>4.3 Architecture</strong></span></h3>
 The architecture of the network mentioned in the paper is simple, because it only consists of a input layer, single hidden layer with 1000 neurons and Relu activation followed by an output layers of size 10 with softmax activation.
 <p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/QC27qZp/model.png" alt="model" width="859" height="248" /></p>
 
@@ -63,7 +63,23 @@ Unfortunately, the standard sequence model framework from Tensorflow cannot be u
 <p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/JHy6pLR/trainepoch.png" alt="trainepoch" width="1049" height="580" /></p>
 
 
-<h3><span style="color: #99ccff; background-color: #ffffff;"><strong>3.4 Effects of parameters</strong></span></h3>
 <h2>5. Results:</h2>
+The paper contained most of the information required to reproduce the results, although the source code is not directly available. From our perspective the hardest part to reproduce was the moment accountant. There seems to be a mistake in the moment accountant vs composition theorem privacy budget estimation. The figure 2 of the paper clerly indicates epsilon of 4.5 for 400 Epochs, while the paper reports 2.55 as the privacy loss estimation. This could be an editing error. 
+
+The paper also indicates that the noisy covariance matrix that is used to find principal components of the batch input, is based on a random sample of data. For our reproduction, basing the covariance matrix on only a small sample of data resulted in very poor final accuracy. Only when the noisy covariance matrix was based on full training data set, which is 60 000 samples, we could obtain satisfying results.Furthermore, the authors mention taking the privacy cost of the Principal component analysis into account, but the method or quantitive formulation is not included. 
+
+The goal was to reproduce the Figure 3 from the paper, which visualises the accuracy and privacy loss versus epochs for different noise levels. Below our results are presented. The test set accuracy is 89%, 95% and 96%  for (0.5, 10−5), (2, 10−5),and (8, 10−5)-differential privacy respectively.
+
+
+<p><img style="float: left;" src="https://i.ibb.co/41PtsLL/highnoise.png" alt="highnoise" width="394" height="295" /><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/kVZLhhZ/mediumnoise.png" width="394" height="295" /></p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/gM6NfRX/lownoise.png" alt="Low noise" width="394" height="295" /></p>
+
+
+
+
+Furthermor variation of number of hidden layers is conducted and similar results are obtained.
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/xqC2xMn/hiddenlayers-varying.jpg" alt="" /></p>
+
+
 <p>&nbsp;</p>
 <h2>6. Conclusion:</h2>
