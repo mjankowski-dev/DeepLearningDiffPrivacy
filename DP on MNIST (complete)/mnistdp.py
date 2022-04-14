@@ -94,26 +94,26 @@ allParameters = {**parameters_ma,
 
 optimizer = tf.keras.optimizers.SGD(learning_rate=lr_sgd)  # [0.01,0.07] stable, best at 0.05
 loss_object = tf.keras.losses.SparseCategoricalCrossentropy(reduction=tf.compat.v1.losses.Reduction.NONE)
-train_acc_metric = tf.keras.metrics.SparseCategoricalAccuracy()
-val_acc_metric = tf.keras.metrics.SparseCategoricalAccuracy()
+metric_train_acc = tf.keras.metrics.SparseCategoricalAccuracy()
+metric_val_acc = tf.keras.metrics.SparseCategoricalAccuracy()
 
 
-def train_data_for_one_epoch(dp_sgd, optimizer, model, loss_object, moment_accountant):
+def train_epoch(dp_sgd, optimizer, model, loss_object, moment_accountant):
     losses = []
-    pbar = tqdm(total=len(list(enumerate(train))), position=0, leave=True,
+    progress = tqdm(total=len(list(enumerate(train))), position=0, leave=True,
                 bar_format='{l_bar}{bar}| {n_fmt}/{total_fmt} ')  # progress bar
     go = True
     step = 0
     for x_batch_train, y_batch_train in train:  #Applying gradients and calculating moments for each batch
         step += 1
-        logits, loss_value = dp_sgd.apply_gradients(optimizer, model, loss_object, x_batch_train, y_batch_train)
+        logit, loss = dp_sgd.apply_gradients(optimizer, model, loss_object, x_batch_train, y_batch_train)
         delta, eps = moment_accountant.compute_deltaEps()
 
-        losses.append(loss_value)   # Creating loss list
+        losses.append(loss)   # Creating loss list
 
-        train_acc_metric(y_batch_train, logits)
-        pbar.set_description("Training loss for step %s: %.4f" % (int(step), float(loss_value)))
-        pbar.update()
+        metric_train_acc(y_batch_train, logit)
+        progress.set_description("Train loss for step number%s: %.4f" % (int(step), float(loss)))
+        progress.update()
 
         if not moment_accountant.check_thresholds(delta, epsilon):   # Privacy budget threshold
             go = False
@@ -122,20 +122,19 @@ def train_data_for_one_epoch(dp_sgd, optimizer, model, loss_object, moment_accou
     return losses, go
 
 
-def perform_validation():
+def validate():
     losses = []
     for x_val, y_val in test:
-        val_logits = model(x_val)
-        val_loss = loss_object(y_val, val_logits)
-        # val_loss = tf.reduce_sum(val_loss, axis = 0).numpy()
-        losses.append(val_loss)
-        val_acc_metric(y_val, val_logits)
+        logits_val = model(x_val)
+        loss_val = loss_object(y_val, logits_val)
+        losses.append(loss_val)
+        metric_val_acc(y_val, logits_val)
     return losses
 
 
-def base_model():
+def build_model():
     inputs = tf.keras.Input(shape=(60,), name='digits')
-    #x = DP_PCA(60, seed, std_pca)(inputs)
+    inputs = DP_PCA(60, seed, std_pca)(inputs)
     x = tf.keras.layers.Dense(1000, activation='relu', name='dense_1')(inputs)
     outputs = tf.keras.layers.Dense(10, activation='softmax', name='predictions')(x)
     model = tf.keras.Model(inputs=inputs, outputs=outputs)
@@ -144,7 +143,7 @@ def base_model():
 
 
 ## INITIALIZE
-model = base_model()
+model = build_model()
 model.layers[2].trainable = False  # pca layer
 DPSGD = DP_SGD(lr_sgd, std_sgd, gs, C, seed)
 if epsFixed:
@@ -159,39 +158,26 @@ else:
 
 # Iterate over epochs.
 epochs = 50  # 18
-epochs_val_losses, epochs_train_losses = [], []
+val_acc_list, train_acc_list = [], []
 for epoch in range(epochs):
     print('Start of epoch %d' % (epoch,))
 
-    losses_train, go = train_data_for_one_epoch(DPSGD, optimizer, model, loss_object, accountant)
-    train_acc = train_acc_metric.result()
+    train_losses, go = train_epoch(DPSGD, optimizer, model, loss_object, accountant)
+    train_acc = metric_train_acc.result()
 
-    losses_val = perform_validation()
-    val_acc = val_acc_metric.result()
+    val_losses = validate()
+    val_acc = metric_val_acc.result()
 
-    losses_train_mean = np.mean(losses_train)
-    losses_val_mean = np.mean(losses_val)
-    epochs_val_losses.append(losses_val_mean)
-    epochs_train_losses.append(losses_train_mean)
+    val_acc_list.append(val_acc)
+    train_acc_list.append(train_acc)
 
-    print('\n Epoch %s: Train loss: %.4f  Validation Loss: %.4f, Train Accuracy: %.4f, Validation Accuracy %.4f' % (
-    epoch, float(losses_train_mean), float(losses_val_mean), float(train_acc), float(val_acc)))
+    print('\n Epoch %s:, Training Accuracy: %.4f, Test Accuracy %.4f' % (
+    epoch, float(train_acc), float(val_acc)))
 
-    train_acc_metric.reset_states()
-    val_acc_metric.reset_states()
+    metric_train_acc.reset_states()
+    metric_val_acc.reset_states()
     if not go:
         print(f"\n Stopping due to privacy loss at epoch {epoch}/{epochs} \n")
         break
 
 
-def plot_metrics(train_metric, val_metric, metric_name, title, ylim=5):
-    plt.title(title)
-    # plt.ylim(0,ylim)
-    plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
-    x = np.arange(1, len(train_metric) + 1)
-    plt.plot(x, train_metric, color='blue', label=metric_name)
-    plt.plot(x, val_metric, color='green', label='val_' + metric_name)
-    plt.legend()
-
-
-plot_metrics(epochs_train_losses, epochs_val_losses, "Loss", "Loss", ylim=10.0)
