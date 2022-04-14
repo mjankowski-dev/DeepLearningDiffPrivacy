@@ -42,7 +42,7 @@ The process of applying PCA to any data set start with standardazing the data. S
 Next step is to calculate the covariance matrix of the data. Covariance matrix is a symmetrical matrix of size  equal to the input size. The entries are the covariances associated with the pairs of variables. The diagonal is composed of variances, as covariance of variable with itself is a variance. Covariance matrix can be obtained by multiplying the input data by the transpose of the data. 
 
 To obtain a Differentially private version of the pca, one needs to add noise to the variance matrix. To preserve the properties of the covariance matrix, the added noise should be symmetrical aswell. For this reproduction we are using Gaussian noise as the authors of the paper suggested. Noise level can be varied by adjusting the standard deviation of the distribution. Following code snippet presents how to obtain private covariance matrix:
-<p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/N2rNr18/noise.png" alt="noise" width="1064" height="171" /></p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/wgD1G9d/pca.png" alt="" width="1072" height="298" /></p>
 
 By calculating the eigenvalues and eigenvectors of the noisy covariance matrix, one can identify the principal components of the data set. Ordering the eigenvectors in descending order corresponds to ordering the components in order of significance. To obtain n-dimensional projection a feature vectors is constructed, containing n first sorted eigenvectors. 
 
