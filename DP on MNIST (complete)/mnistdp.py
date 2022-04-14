@@ -134,7 +134,6 @@ def validate():
 
 def build_model():
     inputs = tf.keras.Input(shape=(60,), name='digits')
-    inputs = DP_PCA(60, seed, std_pca)(inputs)
     x = tf.keras.layers.Dense(1000, activation='relu', name='dense_1')(inputs)
     outputs = tf.keras.layers.Dense(10, activation='softmax', name='predictions')(x)
     model = tf.keras.Model(inputs=inputs, outputs=outputs)
