@@ -83,3 +83,7 @@ Furthermor variation of number of hidden layers is conducted and similar results
 <p>&nbsp;</p>
 <h2>6. Conclusion:</h2>
 In the previous sections differential privacy has been introduced according to the Deep Learning with Differential Privacy paper.. After this introduction an attempt was made to reproduce M.Abadi's et al. moment accountant, optimizer and PCA layer. Units tests of these functions presented worthwhile results, suggesting further progress could be made. After training on the MNIST dataset and evaluating the results the reproduction seems to be successful. The observed accuracies closely match those of the original paper and the moments suffice. Finally, in section on experience some recommendations are given for others inspired by our attempt. This concludes our reproducibility attempt. 
+
+<h2>7. Contribution:</h2>
+Reinier Vos: DP_SGD optimizer, Moments accountant
+Maciej Jankowski: PCA, benchmark networks, results
