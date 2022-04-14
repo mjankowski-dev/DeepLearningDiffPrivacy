@@ -39,11 +39,9 @@ def base_model():
     return model
 
 def pca(data):
-    print('progress 1')
     covar_matrix = np.matmul(data.T, data)
     print ( "The shape of variance matrix = ", covar_matrix.shape)
     values, vectors = eigh(covar_matrix, eigvals=(724,783))
-
     vectors = vectors.T
     print(vectors.shape)
     final_data = np.matmul(vectors, data.T)

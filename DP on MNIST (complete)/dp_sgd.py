@@ -14,23 +14,17 @@ class DP_SGD:
         self.C = C  # gradient norm bound
         self.seed = seed
         self.std = sigma * C  # for noise addition
-        # self.loss_object = ? # define this here
+
 
     def apply_gradients(self, optimizer, model, loss_object, x, y):
 
-        # n = tf.shape(x).numpy()
-        ## run loop
+
         with tf.GradientTape(persistent=True) as tape:
             y_pred = model(x)
             loss = loss_object(y, y_pred)
             loss_red = tf.reduce_sum(loss, axis=0)
 
-        #########
-        # MAIN PROBLEM: I only get a single set of gradients even if i have a loss function which outputs loss for every sample
-        # do you want me to parallelize this myself
-        ########
-        ## obtain gradients
-        # grad = tape.batch_jacobian(loss, model.trainable_weights)
+
         grad = tape.jacobian(loss, model.trainable_weights, parallel_iterations=None, experimental_use_pfor=False)
 
         ## clip gradients per layer
@@ -63,22 +57,7 @@ class DP_SGD:
             noise = tf.random.normal(shape, mean=0, stddev=self.std, dtype=tf.dtypes.float32, seed=self.seed)
             grad[l] = tf.add(grad_red, noise) / self.gs
 
-        ## descent
-        # print(grad)
-        '''
-        print(f'HELOO={len(grad)}')
-        print(f'HELOO={len(model.trainable_weights)}')
-        ga = []
-        ma = []
-        print(type(model.trainable_weights))
-        for l in range(len(model.trainable_weights)):
-            ga.append(tf.shape(grad[l]).numpy())
-            ma.append(tf.shape(model.trainable_weights[l]).numpy())
-        zipp = list(zip(ga,ma))
-        print(zipp)
 
-        #print(model.trainable_weights)
-        '''
 
         optimizer.apply_gradients(zip(grad, model.trainable_weights))
 

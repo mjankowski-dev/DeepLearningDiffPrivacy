@@ -1,5 +1,4 @@
 from momentacc import *
-from trainingloop import *
 from dp_sgd import *
 from tensorflow.python.ops.numpy_ops import np_config
 np_config.enable_numpy_behavior()
@@ -8,6 +7,7 @@ import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
 import numpy as np
 from scipy.linalg import eigh
+from tqdm import tqdm
 
 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
 assert x_train.shape == (60000, 28, 28), 'Shape not equal'
@@ -27,17 +27,16 @@ x_train = scaler.fit_transform(x_train)
 x_test = scaler.fit_transform(x_test)
 totalset = scaler.fit_transform(totalset)
 
+
 covar = np.matmul(totalset.T, totalset)  # Compute the covariance matrix on the data set
 shape = tf.shape(covar)
 noise = tf.random.normal(shape, mean=0, stddev=16, dtype=tf.dtypes.float32)  # Create noise matrix of the same shape
 noise = (noise + noise.T) / 2  # Make sure noise matrix is symmetric
 covar += noise  # Add the noise
-
-
 def pca(data, covar):
-    values, vectors = eigh(covar, eigvals=(724, 783))
+    values, vectors = eigh(covar, eigvals=(724, 783))  #Calculate vectors of covariance matrix
     vectors = vectors.T
-    final_data = np.matmul(vectors, data.T)
+    final_data = np.matmul(vectors, data.T)  # Apply projection to data
 
     return final_data
 
@@ -56,7 +55,7 @@ y_test_batches = np.array_split(y_test, batches)
 test = list(zip(x_test_batches, y_test_batches))
 
 seed = 2
-std_pca = 16  # 4 # std for pca
+std_pca = 16  # std for pca
 std_sgd = 8  # std for dp_sgd
 batch_size = 600
 lr_sgd = 0.05  # [0.01,0.07] stable, best at 0.05
@@ -64,7 +63,6 @@ C = 4  # gradient clipping bound
 gs = batch_size
 np.random.seed(seed)
 
-# moment accountant specific
 parameters_ma = {"maxOrder": 32,
                  "sigma": std_sgd,
                  "q": batch_size / 60000,
@@ -120,7 +118,7 @@ def train_data_for_one_epoch(dp_sgd, optimizer, model, loss_object, moment_accou
         if not moment_accountant.check_thresholds(delta, epsilon):   # Privacy budget threshold
             go = False
             break
-     print(f'Delta = {delta} | Epsilon = {epsilon}')
+    print(f'Delta = {delta} | Epsilon = {epsilon}')
     return losses, go
 
 
@@ -137,7 +135,7 @@ def perform_validation():
 
 def base_model():
     inputs = tf.keras.Input(shape=(60,), name='digits')
-    x = DP_PCA(60, seed, std_pca)(inputs)
+    #x = DP_PCA(60, seed, std_pca)(inputs)
     x = tf.keras.layers.Dense(1000, activation='relu', name='dense_1')(inputs)
     outputs = tf.keras.layers.Dense(10, activation='softmax', name='predictions')(x)
     model = tf.keras.Model(inputs=inputs, outputs=outputs)
